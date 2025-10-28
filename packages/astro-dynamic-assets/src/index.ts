@@ -1,11 +1,12 @@
 import { Config } from "@/types";
-import { type APIRoute } from "astro";
+import { ImageMetadata, type APIRoute } from "astro";
 import fs from "node:fs/promises";
 import { match } from "ts-pattern";
 import { renderToStaticMarkup } from "react-dom/server";
-import satori, { FontStyle, FontWeight } from "satori";
+import satori from "satori";
 import sharp from "sharp";
 import { type JSX } from "react";
+import path from "node:path";
 
 const isDev = () => process.env.NODE_ENV === "development"; // import.meta.env.DEV
 
@@ -198,7 +199,61 @@ export function astroDynamicAssets(config: Config) {
       }
     };
 
+  async function getAstroImageBuffer(image: ImageMetadata) {
+    const fileExtension = RegExp(/.(jpg|jpeg|png)$/)
+      .exec(image.src)?.[0]
+      .slice(1);
+    const fileToRead = getAstroImagePath(image);
+
+    return {
+      buffer: await match(isDev() || !config.ssr)
+        .with(true, async () => await fs.readFile(fileToRead))
+        .with(false, async () => {
+          const res = await fetch(new URL(fileToRead, config.site));
+
+          if (!res.ok) {
+            throw new Error(`Failed to fetch image: ${fileToRead}`);
+          }
+
+          return Buffer.from(await res.arrayBuffer());
+        })
+        .run(),
+      fileType: match(fileExtension)
+        .with("jpg", "jpeg", () => "jpeg")
+        .with("png", () => "png")
+        .otherwise(() => {
+          throw new Error(`Must be a jpg, jpeg or png`);
+        }),
+    };
+  }
+
+  async function getAstroImageBase64(image: ImageMetadata) {
+    const { buffer, fileType } = await getAstroImageBuffer(image);
+
+    return imageBufferToBase64(buffer, fileType);
+  }
+
   return {
     apiImageEndpoint,
+    getAstroImageBuffer,
+    getAstroImageBase64,
   };
+}
+
+export function imageBufferToBase64(buffer: Buffer, fileType: string) {
+  return `data:image/${fileType};base64, ${buffer.toString("base64")}`;
+}
+
+export function getImageNameFromTsxPath(path: string) {
+  return path
+    .split("/")
+    .at(-1)
+    ?.replace(/\.tsx$/, "")
+    .replace(/^_/, "");
+}
+
+export function getAstroImagePath(image: ImageMetadata) {
+  return isDev()
+    ? path.resolve(image.src.replace(/\?.*/, "").replace("/@fs", ""))
+    : image.src;
 }

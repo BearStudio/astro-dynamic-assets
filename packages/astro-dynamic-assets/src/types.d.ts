@@ -20,4 +20,5 @@ export type Config = {
    * Give the Astro site options specified in your project's `astro.config` (you can use `import.meta.env.SITE`).
    */
   site: string;
+  ssr?: boolean;
 };
