@@ -1,0 +1,52 @@
+{
+  "name": "@bearstudio/astro-dynamic-assets",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "description": "Astro library to build images from JSX templates",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts --format esm --dts --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "astro",
+    "typescript",
+    "images",
+    "generation",
+    "automatic",
+    "astro-integration"
+  ],
+  "author": {
+    "email": "yoann@bearstudio.fr",
+    "name": "Yoann Fleury",
+    "url": "https://www.yoannfleury.dev"
+  },
+  "dependencies": {
+    "astro": "5.14.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "satori": "0.18.3",
+    "sharp": "0.34.4",
+    "ts-pattern": "5.8.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.1.1",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3"
+  }
+}
