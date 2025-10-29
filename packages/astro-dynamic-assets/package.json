@@ -48,5 +48,14 @@
     "@types/react-dom": "19.1.1",
     "tsup": "8.5.0",
     "typescript": "5.9.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BearStudio/astro-dynamic-assets.git",
+    "directory": "packages/astro-dynamic-assets"
+  },
+  "bugs": {
+    "url": "https://github.com/BearStudio/astro-dynamic-assets/issues"
+  },
+  "readme": "./README.md"
 }
