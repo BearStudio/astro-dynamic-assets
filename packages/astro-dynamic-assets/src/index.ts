@@ -108,7 +108,7 @@ export function astroDynamicAssets(config: Config) {
               --scale: ${params.debugScale ?? 0.4};
             }
             body {
-              background: ${config.theme.background} url('/debug.png') repeat;
+              background: #111111 url('/debug.png') repeat;
               margin: 0;
               width: 100vw;
               height: 100vh;
