@@ -1,6 +1,6 @@
 {
   "name": "@bearstudio/astro-dynamic-assets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "type": "module",
   "description": "Astro library to build images from JSX templates",
